@@ -29,6 +29,7 @@ from time import sleep
 import pandas as pd
 from pycaret.regression import load_model, predict_model
 from sklearn.metrics import roc_auc_score, accuracy_score
+import requests 
 
 from river import evaluate
 from river import metrics
@@ -44,8 +45,16 @@ accuracy = metrics.Accuracy()
 
 # Accuracy of Offline model
 # Initialize an empty list to store actual and predicted labels
-actual_labels = []
-predicted_labels = []
+actual_labels_rf = []
+predicted_labels_rf = []
+
+actual_labels_lightgbm = []
+predicted_labels_lightgbm = []
+
+actual_labels_et = []
+predicted_labels_et = []
+
+api_url = "https://api.powerbi.com/beta/db5def6b-8fd8-4a3e-91dc-8db2501a6822/datasets/e26df6ad-6564-4460-9de4-f7163a75b6fc/rows?referrer=desktop&experience=power-bi&key=IYrPBZ3F0rY4sHFFOVZoCO1gzB0KtIeimqBvBqg2eHxV%2BXt%2BD7NTmOuEtXqIXD75f27%2BGIzbSppGQUlyGAR0rg%3D%3D"
 
 class User(object):
 
@@ -129,40 +138,69 @@ def main(args):
                     }
 
             df = pd.DataFrame(data, index=[user.timestamp])
-
-            # Load the model and make predictions
-            saved_rf = load_model('Model_rf')
-            predictions = predict_model(saved_rf, data=df)
+            '''print(df)
             
-            print("Predicted", predictions.iloc[0]['prediction_label'], " VS Actual=", user.Severity)
+            # Offline model 1
+            # Load Model_rf and make predictions
+            saved_rf = load_model('Model_rf')
+            predictions_rf = predict_model(saved_rf, data=df)
+            print("\nPredicted_Model_rf", predictions_rf.iloc[0]['prediction_label'], " VS Actual=", user.Severity)
+            
+            predicted_labels_rf.append(predictions_rf.iloc[0]['prediction_label'])
+            actual_labels_rf.append(user.Severity)
+            offline_accuracy_rf = accuracy_score(actual_labels_rf, predicted_labels_rf)
+            print("Accuracy (Offline_Model_rf):", offline_accuracy_rf)
 
-            # Add the predicted label to the list
-            predicted_labels.append(predictions.iloc[0]['prediction_label'])
+            # Offline model 2
+            # Load Model_lightgbm and make predictions
+            saved_lightgbm = load_model('Model_lightgbm')
+            predictions_lightgbm = predict_model(saved_lightgbm, data=df)
+            print("\nPredicted_Model_lightgbm", predictions_lightgbm.iloc[0]['prediction_label'], " VS Actual=", user.Severity)
+            
+            predicted_labels_lightgbm.append(predictions_lightgbm.iloc[0]['prediction_label'])
+            actual_labels_lightgbm.append(user.Severity)
+            offline_accuracy_lightgbm = accuracy_score(actual_labels_lightgbm, predicted_labels_lightgbm)
+            print("Accuracy (Offline_Model_lightgbm):", offline_accuracy_lightgbm)
+            
+            # Offline model 3
+            # Load Model_et and make predictions
+            saved_et = load_model('Model_et')
+            predictions_et = predict_model(saved_et, data=df)
+            print("\nPredicted_Model_et", predictions_et.iloc[0]['prediction_label'], " VS Actual=", user.Severity)
+            
+            predicted_labels_et.append(predictions_et.iloc[0]['prediction_label'])
+            actual_labels_et.append(user.Severity)
+            offline_accuracy_et = accuracy_score(actual_labels_et, predicted_labels_et)
+            print("Accuracy (Offline_Model_et):", offline_accuracy_et)
 
-            # Add the actual label to the list
-            actual_labels.append(user.Severity)
-
-            offline_accuracy = accuracy_score(actual_labels, predicted_labels)
-            print("Accuracy (Offline):", offline_accuracy)
-        
-            '''# Calculate AUC score offline
-            auc_score_offline = roc_auc_score([user.Severity], predictions.iloc[0]['Score_offline'])
-            print("AUC Score (Offline):", auc_score_offline)'''
-          
-            # Online model
+            # Online model 1
             y_pred = model.predict_one(data)
             model.learn_one(data, user.Severity)
-            print("Online Prediction = ", y_pred)
+            print("\nOnline Prediction (HoeffdingTreeClassifier) = ", y_pred)
 
-            # Update accuracy metric
             accuracy.update(user.Severity, y_pred)
 
-            # Print current accuracy
             print("Accuracy (Online):", accuracy.get())
-                       
+
+            # Online model 2
+            models = [('LogisticRegression', linear_model.LogisticRegression),
+            ('PAClassifier', linear_model.PAClassifier)]'''
+
+            # Data to insert
+            data_to_insert = {
+                "TP2": data['TP2']
+            }
+            # Make POST request to insert data
+            response = requests.post(api_url, json=data_to_insert)
+
+            if response.status_code == 200:
+                print("Data inserted successfully.")
+            else:
+                print("Failed to insert data. Status code:", response.status_code)
+                print("Response content:", response.text)
+
         except KeyboardInterrupt:
             break
-
         sleep(3)
     consumer.close()
 
