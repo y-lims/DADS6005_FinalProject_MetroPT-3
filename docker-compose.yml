@@ -49,26 +49,6 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1 
-      
-  broker3:
-    image: confluentinc/cp-enterprise-kafka:5.2.2
-    hostname: broker3
-    container_name: broker3
-    depends_on:
-      - zookeeper
-    ports:
-      - "29094:29094"
-      - "9094:9094"
-    environment:
-      KAFKA_BROKER_ID: 3
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker3:29094,PLAINTEXT_HOST://localhost:9094
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1 
   
   schema-registry:
     image: confluentinc/cp-schema-registry:5.2.2
@@ -78,7 +58,6 @@ services:
       - zookeeper
       - broker
       - broker2
-      - broker3
     ports:
       - "8081:8081"
     environment:
@@ -96,7 +75,6 @@ services:
       - zookeeper
       - broker
       - broker2
-      - broker3
       - schema-registry
     ports:
       - "8083:8083"
@@ -148,7 +126,6 @@ services:
     depends_on:
       - broker
       - broker2
-      - broker3 
       - schema-registry
       - kafka-connect-avro
     environment:
