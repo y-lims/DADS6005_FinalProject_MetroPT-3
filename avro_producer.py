@@ -104,20 +104,20 @@ def main(args):
     print("Producing user records to topic {}. ^C to exit.".format(topic))
     
     
-    api = r"D:\NIDA\DADS6005\Finalproject\avro_kafka_example\Online_data.csv"
+    api = r"D:\NIDA\DADS6005\Finalproject\avro_kafka_example1\Online_data.csv"
 
     
     #Create topic with a number of partition and replicas
     admin_client = AdminClient(producer_conf)
     topic_list = []
-    topic_list.append(NewTopic(topic, 2, 3))
+    topic_list.append(NewTopic(topic, 2, 2))
     admin_client.create_topics(topic_list)
 
   
     while True:
         # Serve on_delivery callbacks from previous calls to produce()
         
-        df = pd.read_csv(r"D:\NIDA\DADS6005\Finalproject\avro_kafka_example\Online_data.csv")
+        df = pd.read_csv(r"D:\NIDA\DADS6005\Finalproject\avro_kafka_example1\Online_data.csv")
         for i in range(len(df)):
             data = df.iloc[i, :]
             print(data)
@@ -137,7 +137,6 @@ def main(args):
         
             sleep(3)
             producer.poll(0.0)
-            
         
         print("\nFlushing records...")
         producer.flush()
