@@ -1,0 +1,75 @@
+{
+    "namespace": "confluent.io.examples.serialization.avro",
+    "name": "User",
+    "type": "record",
+    "fields": [
+        {
+            "name": "timestamp",
+            "type": "string"
+        },
+        {
+            "name": "TP2",
+            "type": "double"
+        },
+		{
+            "name": "TP3",
+            "type": "double"
+        },
+		{
+            "name": "H1",
+            "type": "double"
+        },
+		{
+            "name": "DV_pressure",
+            "type": "double"
+        },
+		{
+            "name": "Reservoirs",
+            "type": "double"
+        },
+		{
+            "name": "Oil_temperature",
+            "type": "double"
+        },
+		{
+            "name": "Motor_current",
+            "type": "double"
+        },
+        {
+            "name": "COMP",
+            "type": "int"
+        },
+        {
+            "name": "DV_eletric",
+            "type": "int"
+        },
+        {
+            "name": "Towers",
+            "type": "int"
+        },
+        {
+            "name": "MPG",
+            "type": "int"
+        },
+        {
+            "name": "LPS",
+            "type": "int"
+        },
+        {
+            "name": "Pressure_switch",
+            "type": "int"
+        },
+        {
+            "name": "Oil_level",
+            "type": "int"
+        },
+        {
+            "name": "Caudal_impulses",
+            "type": "int"
+        },
+        {
+            "name": "Severity",
+            "type": "string"
+        }
+    ]
+}

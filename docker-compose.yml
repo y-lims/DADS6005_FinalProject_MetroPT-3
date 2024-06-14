@@ -104,7 +104,7 @@ services:
       - ./connect-plugins/:/connect-plugins
       
   quickstart-mysql:
-    container_name: quickstart-mysql
+    container_name: MetroPT-mysql-sink
     hostname: quickstart-mysql
     image: mysql:5.7
     environment:
@@ -116,7 +116,7 @@ services:
       - ./mysql/db_setup.sql:/tmp/db_setup.sql
     ports:
       - "3306:3306"
-    command: --init-file /tmp/db_setup.sql
+    command: --init-file /tmp/db_setup.sql      
     
   kafka-ui:
     container_name: kafka-ui
@@ -125,7 +125,7 @@ services:
       - 8889:8080
     depends_on:
       - broker
-      - broker2
+      - broker2 
       - schema-registry
       - kafka-connect-avro
     environment:
