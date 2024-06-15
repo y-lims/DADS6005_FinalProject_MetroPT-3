@@ -1,8 +1,11 @@
 # [6005]_FinalProject_MetroPT-3
+## Real-Time Application
 ```
 dataset: https://archive.ics.uci.edu/dataset/791/metropt+3+dataset
 pycaret: https://pycaret.gitbook.io/docs/get-started/quickstart
 ```
+System Flow
+0. docker-compose up -d
 1. python avro_producer.py -b "localhost:9092" -t "rawData" -s "http://localhost:8081"
 2. curl -d @"sinkMysql_MetroPT.json" -H "Content-Type: application/json" -X POST http://localhost:8083/connectors
     2.1. Open terminal in Docker
