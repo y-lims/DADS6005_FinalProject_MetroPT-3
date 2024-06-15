@@ -104,7 +104,7 @@ def main(args):
     print("Producing user records to topic {}. ^C to exit.".format(topic))
     
     
-    api = r"D:\NIDA\DADS6005\Finalproject\avro_kafka_example1\Online_data.csv"
+    api = r"D:\NIDA\DADS6005\Finalproject\avro_kafka_use\Online_data.csv"
 
     
     #Create topic with a number of partition and replicas
@@ -117,7 +117,7 @@ def main(args):
     while True:
         # Serve on_delivery callbacks from previous calls to produce()
         
-        df = pd.read_csv(r"D:\NIDA\DADS6005\Finalproject\avro_kafka_example1\Online_data.csv")
+        df = pd.read_csv(r"D:\NIDA\DADS6005\Finalproject\avro_kafka_use\Online_data.csv")
         for i in range(len(df)):
             data = df.iloc[i, :]
             print(data)
